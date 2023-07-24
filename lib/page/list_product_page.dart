@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:payetonkawa/entity/product.dart';
 import 'package:payetonkawa/model/product_model.dart';
+import 'package:payetonkawa/page/ar_page.dart';
 import 'package:payetonkawa/page/detail_product_page.dart';
 
 class ListProductPage extends StatefulWidget {
@@ -11,14 +12,15 @@ class ListProductPage extends StatefulWidget {
 }
 
 class _ListProductPageState extends State<ListProductPage> {
-  ProductModel _productModel = new ProductModel();
+  final ProductModel _productModel = new ProductModel();
   List<Product> _product = [];
 
   bool _isBusy = false;
 
   @override
   void initState() {
-    getProduct();
+    super.initState();
+    getProducts();
   }
 
   void busy(bool value){
@@ -26,16 +28,13 @@ class _ListProductPageState extends State<ListProductPage> {
   }
 
 
-  void getProduct() async {
-    busy(true);
-    var data = await _productModel.getAllProduct();
+  Future<void> getProducts() async {
+    var data = await _productModel.getAllProducts();
     if(data != null){
-    setState(() {
-      _product = data;
-    });
+      setState(() {
+        _product = data;
+      });
     }
-    
-    busy(false);
   }
 
   void openProduct(String id){
@@ -46,11 +45,26 @@ class _ListProductPageState extends State<ListProductPage> {
     );
   }
 
+  void openAR(){
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const ArPage(),
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Liste des produits"),
+        actions: [
+          TextButton.icon(
+            onPressed: () => openAR(), 
+            icon: Icon(Icons.add_box_rounded), 
+            label: Text("AR")
+          )
+        ],
       ),
       body: Column(
         children: [
@@ -59,11 +73,14 @@ class _ListProductPageState extends State<ListProductPage> {
             child: const CircularProgressIndicator()
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _product.length,
-              itemBuilder:(context, index) => ProductItem(
-                product: _product[index],
-                onClick: () => openProduct(_product[index].id!),
+            child: RefreshIndicator(
+              onRefresh: () => getProducts(),
+              child: ListView.builder(
+                itemCount: _product.length,
+                itemBuilder:(context, index) => ProductItem(
+                  product: _product[index],
+                  onClick: () => openProduct(_product[index].id!),
+                ),
               ),
             ),
           )
@@ -73,6 +90,7 @@ class _ListProductPageState extends State<ListProductPage> {
   }
 }
 
+// ignore: must_be_immutable
 class ProductItem extends StatelessWidget {
   Product product;
   Function() onClick;
@@ -83,6 +101,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(product.name!),
+      leading: Text(product.id!),
       onTap: onClick,
     );
   }
