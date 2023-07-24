@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:payetonkawa/entity/product.dart';
 import 'package:http/http.dart' as http;
+import 'package:payetonkawa/model/product.dart';
 
-class ProductModel {
+class ProductModel extends Model {
   Client httpClient = http.Client();
 
   Future<List<Product>?> getAllProducts() async {
     try {
-      var url = Uri.parse("https://615f5fb4f7254d0017068109.mockapi.io/api/v1/products");
+      var url = Uri.parse("$baseUrl/products");
       var response = await httpClient.get(url);
 
       if(response.statusCode == 200){
@@ -26,7 +27,7 @@ class ProductModel {
 
   Future<Product?> getProduct(String id) async {
     try{
-      var url = Uri.parse("https://615f5fb4f7254d0017068109.mockapi.io/api/v1/products/${id}");
+      var url = Uri.parse("$baseUrl/products/$id");
       var response = await httpClient.get(url);
 
       if(response.statusCode == 200){
