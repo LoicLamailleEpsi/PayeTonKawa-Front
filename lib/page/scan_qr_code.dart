@@ -42,11 +42,12 @@ class _ScanQrCodeState extends State<ScanQrCode> {
 
           if (validBarcodes.isNotEmpty && !isCodeValid) {
             isCodeValid = true;
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ListProductPage()),
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const ListProductPage(),
+              ),
+              (route) => route.isFirst,
             );
-
             // Fermer la caméra après vérification du QR code
             _scannerController?.stop();
           } else {

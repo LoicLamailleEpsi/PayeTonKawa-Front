@@ -44,9 +44,9 @@ class _ListProductPageState extends State<ListProductPage> {
   }
 
   void redirectLogin() {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const LoginPage(),
-    ));
+    Navigator.of(context).popUntil(
+      (route) => route.isFirst,
+    );
   }
 
   @override
