@@ -19,8 +19,9 @@ class _ArPageState extends State<ArPage> {
   late ARSessionManager _arSessionManager;
   late ARObjectManager _arObjectManager;
 
-  ARNode? _localObjectNode;
   ARNode? _webObjectNode;
+
+  bool _loadGlb = false;
 
   void onARViewCreated(
     ARSessionManager arSessionManager, 
@@ -35,47 +36,34 @@ class _ArPageState extends State<ArPage> {
       showFeaturePoints: false,
       showPlanes: true,
       customPlaneTexturePath: "assets/png/triangle.png",
-      showWorldOrigin: true,
-      showAnimatedGuide: true,
-      handleTaps: false
+      showWorldOrigin: false,
+      showAnimatedGuide: false,
+      handleTaps: false,
+      handleRotation: true,
+      handlePans: true,
     );
 
     _arObjectManager.onInitialize();
   }
 
-  Future<void> onLocalObjectButtonPressed() async {
-    // 1
-    if (_localObjectNode != null) {
-      _arObjectManager.removeNode(_localObjectNode!);
-      _localObjectNode = null;
-    } else {
-      // 2
-      var newNode = ARNode(
-          type: NodeType.webGLB,
-          //uri: "assets/gltf/chicken/Chicken_01.gltf",
-          uri: "https://raw.githubusercontent.com/LoicLamailleEpsi/PayeTonKawa-Front/feat/coffeeAR/assets/glb/Nespresso.glb",
-          scale: Vector3(0.2, 0.2, 0.2),
-          position: Vector3(0.0, 0.0, 0.0),
-          rotation: Vector4(1.0, 0.0, 0.0, 0.0)
-        );
-      // 3
-      bool? didAddLocalNode = await _arObjectManager.addNode(newNode);
-      _localObjectNode = (didAddLocalNode!) ? newNode : null;
-    }
+  void loadGlb(bool value){
+    setState(() => _loadGlb = value);
   }
 
   Future<void> onWebObjectAtButtonPressed() async {
+    loadGlb(true);
     if (_webObjectNode != null) {
       _arObjectManager.removeNode(_webObjectNode!);
       _webObjectNode = null;
     } else {
       var newNode = ARNode(
           type: NodeType.webGLB,
-          uri: "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
-          scale: Vector3(0.2, 0.2, 0.2));
+          uri: "https://raw.githubusercontent.com/LoicLamailleEpsi/PayeTonKawa-Front/feat/coffeeAR/Nespresso.glb",
+          scale: Vector3(0.1, 0.1, 0.1));
       bool? didAddWebNode = await _arObjectManager.addNode(newNode);
       _webObjectNode = (didAddWebNode!) ? newNode : null;
     }
+    loadGlb(false);
   }
 
   @override
@@ -98,13 +86,12 @@ class _ArPageState extends State<ArPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ElevatedButton(
-                  onPressed: () => onLocalObjectButtonPressed(), 
-                  child: const Text("Add local object")
-                ),
-                ElevatedButton(
-                  onPressed: () => onWebObjectAtButtonPressed(), 
-                  child: const Text("Add online object")
+                SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                    onPressed: !_loadGlb ? () => onWebObjectAtButtonPressed() : null, 
+                    child: _loadGlb ? const SizedBox(width: 20,  height: 20, child: CircularProgressIndicator()) : const Text("Afficher la machine à café"),
+                  ),
                 ),
               ],
             ),
