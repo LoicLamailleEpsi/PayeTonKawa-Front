@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:payetonkawa/page/list_product_page.dart';
+import 'package:payetonkawa/page/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,8 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ListProductPage(),
+      home: const LoginPage(),
     );
   }
 }
-
