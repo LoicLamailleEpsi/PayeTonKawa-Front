@@ -51,11 +51,13 @@ class _ArPageState extends State<ArPage> {
     } else {
       // 2
       var newNode = ARNode(
-          type: NodeType.localGLTF2,
-          uri: "assets/gltf/chicken/Chicken_01.gltf",
+          type: NodeType.webGLB,
+          //uri: "assets/gltf/chicken/Chicken_01.gltf",
+          uri: "https://raw.githubusercontent.com/LoicLamailleEpsi/PayeTonKawa-Front/feat/coffeeAR/assets/glb/Nespresso.glb",
           scale: Vector3(0.2, 0.2, 0.2),
           position: Vector3(0.0, 0.0, 0.0),
-          rotation: Vector4(1.0, 0.0, 0.0, 0.0));
+          rotation: Vector4(1.0, 0.0, 0.0, 0.0)
+        );
       // 3
       bool? didAddLocalNode = await _arObjectManager.addNode(newNode);
       _localObjectNode = (didAddLocalNode!) ? newNode : null;
