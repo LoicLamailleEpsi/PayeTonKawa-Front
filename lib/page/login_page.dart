@@ -22,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             const Text(
               "BIENVENUE SUR L'APPLICATION",
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
