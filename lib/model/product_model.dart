@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:payetonkawa/entity/product.dart';
 import 'package:http/http.dart' as http;
-import 'package:payetonkawa/model/product.dart';
+import 'package:payetonkawa/model/model.dart';
 
 class ProductModel extends Model {
   Client httpClient = http.Client();

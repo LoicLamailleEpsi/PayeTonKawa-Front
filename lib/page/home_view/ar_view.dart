@@ -8,14 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:ar_flutter_plugin/ar_flutter_plugin.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-class ArPage extends StatefulWidget {
-  const ArPage({super.key});
+import '../../main.dart';
+
+class ArView extends StatefulWidget {
+  const ArView({super.key});
 
   @override
-  State<ArPage> createState() => _ArPageState();
+  State<ArView> createState() => _ArViewState();
 }
 
-class _ArPageState extends State<ArPage> {
+class _ArViewState extends State<ArView> {
   late ARSessionManager _arSessionManager;
   late ARObjectManager _arObjectManager;
 
@@ -52,6 +54,7 @@ class _ArPageState extends State<ArPage> {
   }
 
   Future<void> onWebObjectAtButtonPressed() async {
+    if(isEmulator) return;
     loadGlb(true);
     if (_webObjectNode != null) {
       _arObjectManager.removeNode(_webObjectNode!);
@@ -89,47 +92,36 @@ class _ArPageState extends State<ArPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Affichage en realité augmenté"),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onPanUpdate: (details) => moveNode(details),
-              child: ARView(
-                onARViewCreated: onARViewCreated,
+    return Stack(
+      children: [
+        GestureDetector(
+          onPanUpdate: (details) => _nodeIsLoad ? moveNode(details) : null,
+          child: !isEmulator ? ARView(
+            onARViewCreated: onARViewCreated,
+          ) : const SizedBox.shrink(),
+        ),
+        
+        Container(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Visibility(
+              visible: !_nodeIsLoad,
+              replacement: ElevatedButton(
+                onPressed: () => resetPositionNode(), 
+                child: const Text("Rénitialiser la position"),
+              ),
+              child: SizedBox(
+                width: 220,
+                child: ElevatedButton(
+                  onPressed: () => onWebObjectAtButtonPressed(), 
+                  child: _loadGlb ? const SizedBox(width: 20,  height: 20, child: CircularProgressIndicator()) : const Text("Afficher la machine à café"),
+                ),
               ),
             ),
           ),
-
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Visibility(
-                  visible: !_nodeIsLoad,
-                  replacement: SizedBox(
-                    width: 200,
-                    child: ElevatedButton(
-                      onPressed: () => resetPositionNode(), 
-                      child: const Text("Rénitialiser la position"),
-                    ),
-                  ),
-                  child: SizedBox(
-                    width: 200,
-                    child: ElevatedButton(
-                      onPressed: !_loadGlb ? () => onWebObjectAtButtonPressed() : null, 
-                      child: _loadGlb ? const SizedBox(width: 20,  height: 20, child: CircularProgressIndicator()) : const Text("Afficher la machine à café"),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

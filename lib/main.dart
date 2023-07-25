@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:payetonkawa/page/list_product_page.dart';
+import 'package:payetonkawa/page/home_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+bool isEmulator = false;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ListProductPage(),
+      home: const HomePage(),
     );
   }
 }
