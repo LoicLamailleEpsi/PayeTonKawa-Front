@@ -43,27 +43,91 @@ class _DetailProductPageState extends State<DetailProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Fiche produit n°${widget.id}"),
+        title: Text(_product?.name ?? ""),
       ),
       body: Builder(
         builder: (context) {
-
           if(_isBusy){
-
             return const Center(
               child: CircularProgressIndicator(),
             );
-
           }else{
 
-            return Column(
-              children: [
-                Text(_product!.details!.description!)
-              ],
+            return Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Description", style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text(_product?.details?.description ?? "N/A"),
+                      ],
+                    ),
+                  ),
+                  DetailInfo(
+                    iconData: Icons.euro_outlined, 
+                    text: "PRIX : ${_product?.details?.price ?? "N/A"}"
+                  ),
+                  DetailInfo(
+                    iconData: Icons.color_lens_outlined, 
+                    text: "Couleur : ${_product?.details?.color ?? "N/A"}"
+                  ),
+                  DetailInfo(
+                    iconData: Icons.inventory_2_outlined, 
+                    text: "${_product?.stock ?? "N/A"} pièces"
+                  ),
+                  const SizedBox(height: 15),
+                  Text(
+                    "ID du produit : ${_product?.id}", 
+                    style: const TextStyle(
+                      color: Colors.grey, 
+                      fontStyle: 
+                      FontStyle.italic
+                    ),
+                  ),
+                ],
+              ),
             );
             
           }
         }
+      ),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class DetailInfo extends StatelessWidget {
+  String text;
+  IconData iconData;
+
+  DetailInfo({super.key, required this.text, required this.iconData});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 5, bottom: 5),
+      child: Row(
+        children: [
+          Material(
+            elevation: 5,
+            borderRadius: BorderRadius.circular(40),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(40),
+              ),
+              child: Icon(iconData, color: Colors.white),
+            ),
+          ),
+          const SizedBox(width: 15),
+          Text(text),
+        ],
       ),
     );
   }

@@ -12,6 +12,7 @@ dependencies:
   ar_flutter_plugin: ^0.7.3
   vector_math: ^2.1.4
   mobile_scanner: ^3.3.0
+  google_fonts: ^5.1.0
 
 dev_dependencies:
   flutter_test:

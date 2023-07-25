@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:payetonkawa/page/list_product_page.dart';
+import 'package:payetonkawa/page/home_page.dart';
 
 class ScanQrCode extends StatefulWidget {
   const ScanQrCode({Key? key}) : super(key: key);
@@ -44,7 +44,7 @@ class _ScanQrCodeState extends State<ScanQrCode> {
             isCodeValid = true;
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (context) => const ListProductPage(),
+                builder: (context) => const HomePage(),
               ),
               (route) => route.isFirst,
             );
