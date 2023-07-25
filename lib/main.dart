@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:payetonkawa/page/home_page.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:payetonkawa/page/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,11 +17,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Paye Ton Kawa',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF453510)),
         useMaterial3: true,
+        textTheme: GoogleFonts.jostTextTheme(),
       ),
-      home: const HomePage(),
+      home: const LoginPage(),
     );
   }
 }
-

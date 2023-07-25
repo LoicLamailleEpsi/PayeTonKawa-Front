@@ -15,6 +15,13 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _homeView = [const ListProductView(), const ArView()];
 
+
+  void redirectLogin() {
+    Navigator.of(context).popUntil(
+      (route) => route.isFirst,
+    );
+  }
+
   void _changePage(int page){
     setState(() {
       _openPage = page;
@@ -27,6 +34,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_titlePage),
+        actions: [
+          IconButton(
+            onPressed: () => redirectLogin(),
+            icon: const Icon(Icons.logout_rounded),
+          )
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _openPage,
