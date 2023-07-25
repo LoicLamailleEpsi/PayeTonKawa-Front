@@ -3,6 +3,7 @@ import 'package:payetonkawa/entity/product.dart';
 import 'package:payetonkawa/model/product_model.dart';
 import 'package:payetonkawa/page/ar_page.dart';
 import 'package:payetonkawa/page/detail_product_page.dart';
+import 'package:payetonkawa/page/login_page.dart';
 
 class ListProductPage extends StatefulWidget {
   const ListProductPage({super.key});
@@ -23,33 +24,28 @@ class _ListProductPageState extends State<ListProductPage> {
     getProducts();
   }
 
-  void busy(bool value){
+  void busy(bool value) {
     setState(() => _isBusy = value);
   }
 
-
   Future<void> getProducts() async {
     var data = await _productModel.getAllProducts();
-    if(data != null){
+    if (data != null) {
       setState(() {
         _product = data;
       });
     }
   }
 
-  void openProduct(String id){
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => DetailProductPage(id: id),
-      )
-    );
+  void openProduct(String id) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => DetailProductPage(id: id),
+    ));
   }
 
-  void openAR(){
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ArPage(),
-      )
+  void redirectLogin() {
+    Navigator.of(context).popUntil(
+      (route) => route.isFirst,
     );
   }
 
@@ -59,25 +55,22 @@ class _ListProductPageState extends State<ListProductPage> {
       appBar: AppBar(
         title: const Text("Liste des produits"),
         actions: [
-          TextButton.icon(
-            onPressed: () => openAR(), 
-            icon: Icon(Icons.add_box_rounded), 
-            label: Text("AR")
+          IconButton(
+            onPressed: () => redirectLogin(),
+            icon: const Icon(Icons.logout_rounded),
           )
         ],
       ),
       body: Column(
         children: [
           Visibility(
-            visible: _isBusy,
-            child: const CircularProgressIndicator()
-          ),
+              visible: _isBusy, child: const CircularProgressIndicator()),
           Expanded(
             child: RefreshIndicator(
               onRefresh: () => getProducts(),
               child: ListView.builder(
                 itemCount: _product.length,
-                itemBuilder:(context, index) => ProductItem(
+                itemBuilder: (context, index) => ProductItem(
                   product: _product[index],
                   onClick: () => openProduct(_product[index].id!),
                 ),
