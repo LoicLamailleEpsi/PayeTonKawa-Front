@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:payetonkawa/page/scan_qr_code.dart';
+import 'package:payetonkawa/page/scan_qr_code_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -9,6 +9,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  void _openQRCode(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ScanQrCodePage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,14 +37,10 @@ class _LoginPageState extends State<LoginPage> {
               height: 350,
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ScanQrCode()),
-                );
-              },
-              child: const Text('Connexion avec un QR Code'),
+            ElevatedButton.icon(
+              onPressed: () => _openQRCode(),
+              label: const Text('Connexion avec un QR Code'),
+              icon: const Icon(Icons.qr_code_2_outlined),
             ),
           ],
         ),
