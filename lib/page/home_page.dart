@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:payetonkawa/page/home_view/ar_view.dart';
 import 'package:payetonkawa/page/home_view/list_product_view.dart';
 import 'package:payetonkawa/page/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,13 +20,14 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _homeView = [const ListProductView(), const ArView()];
 
 
-  void redirectLogin() {
+  void disconnect() async {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => const LoginPage(),
       )
     );
+    await getIt<SharedPreferences>().clear();
   }
 
   void _changePage(int page){
@@ -40,7 +44,7 @@ class _HomePageState extends State<HomePage> {
         title: Text(_titlePage),
         actions: [
           IconButton(
-            onPressed: () => redirectLogin(),
+            onPressed: () => disconnect(),
             icon: const Icon(Icons.logout_rounded),
           )
         ],

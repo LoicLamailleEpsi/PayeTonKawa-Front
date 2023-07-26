@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:payetonkawa/page/scan_qr_code.dart';
+import 'package:payetonkawa/page/scan_qr_code_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,7 +13,7 @@ class _LoginPageState extends State<LoginPage> {
   void _openQRCode(){
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ScanQrCode()),
+      MaterialPageRoute(builder: (context) => const ScanQrCodePage()),
     );
   }
 

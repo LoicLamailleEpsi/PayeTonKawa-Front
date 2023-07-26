@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:payetonkawa/model/customer_model.dart';
+import 'package:payetonkawa/model/user_model.dart';
 import 'package:payetonkawa/page/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ScanQrCode extends StatefulWidget {
-  const ScanQrCode({Key? key}) : super(key: key);
+import '../main.dart';
+
+class ScanQrCodePage extends StatefulWidget {
+  const ScanQrCodePage({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _ScanQrCodeState createState() => _ScanQrCodeState();
+  _ScanQrCodePageState createState() => _ScanQrCodePageState();
 }
 
-class _ScanQrCodeState extends State<ScanQrCode> {
+class _ScanQrCodePageState extends State<ScanQrCodePage> {
+  final SharedPreferences _prefs = getIt<SharedPreferences>();
   MobileScannerController? _scannerController;
   bool _isCodeValid = false;
   bool _isLoad = false;
 
-  final CustomerModel _customerModel = new CustomerModel();
+  final UserModel _userModel = new UserModel();
 
   @override
   void initState() {
@@ -29,16 +33,16 @@ class _ScanQrCodeState extends State<ScanQrCode> {
     super.dispose();
     _scannerController?.dispose();
   }
-
   Future<void> _onDetectQRCode(capture) async{
     _scannerController?.stop();
     setState(() => _isLoad = true);
     final List<Barcode> barcodes = capture.barcodes;
 
-    var customer = await _customerModel.getCustomer(barcodes.first.rawValue!);
+    var user = await _userModel.getUser(barcodes.first.rawValue!);
 
-    if(customer != null && !_isCodeValid){
+    if(user != null && !_isCodeValid){
       _isCodeValid = true;
+      _prefs.setString(idUserPreferenceKey, user.id!);
       _openHomePage();
     }else{
       await _showDialogError();
