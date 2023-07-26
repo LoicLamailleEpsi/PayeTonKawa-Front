@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:payetonkawa/page/home_view/ar_view.dart';
 import 'package:payetonkawa/page/home_view/list_product_view.dart';
+import 'package:payetonkawa/page/login_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,8 +18,11 @@ class _HomePageState extends State<HomePage> {
 
 
   void redirectLogin() {
-    Navigator.of(context).popUntil(
-      (route) => route.isFirst,
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(),
+      )
     );
   }
 

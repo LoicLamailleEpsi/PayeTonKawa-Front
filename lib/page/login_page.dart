@@ -9,6 +9,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  void _openQRCode(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ScanQrCode()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,12 +38,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ScanQrCode()),
-                );
-              },
+              onPressed: () => _openQRCode(),
               child: const Text('Connexion avec un QR Code'),
             ),
           ],
