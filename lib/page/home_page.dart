@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:payetonkawa/entity/user.dart';
+import 'package:payetonkawa/model/user_model.dart';
 import 'package:payetonkawa/page/home_view/ar_view.dart';
 import 'package:payetonkawa/page/home_view/list_product_view.dart';
 import 'package:payetonkawa/page/login_page.dart';
@@ -14,11 +16,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _openPage = 0;
-  String _titlePage = "Paye Ton Kawa";
-
+  final UserModel _userModel = UserModel();
   final List<Widget> _homeView = [const ListProductView(), const ArView()];
 
+  int _openPage = 0;
+  String _titlePage = "Paye Ton Kawa";
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
 
   void disconnect() async {
     Navigator.pushReplacement(
@@ -30,6 +39,15 @@ class _HomePageState extends State<HomePage> {
     await getIt<SharedPreferences>().clear();
   }
 
+  Future<void> getUser() async {
+    var token = getIt<SharedPreferences>().getString(idUserPreferenceKey);
+    if(token != null){
+      _user = await _userModel.getUser(token);
+    }
+    
+    _user ??= User(username: "unknown user");
+  }
+
   void _changePage(int page){
     setState(() {
       _openPage = page;
@@ -37,16 +55,44 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _showDialogProfil() async {
+    await showDialog(
+      context: context, 
+      builder: (context) => AlertDialog(
+        title: const Text("Profil revendeur"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Username : ${_user?.username}"),
+            Text("Email : ${_user?.email}"),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context), 
+            child: const Text("Fermer"),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Colors.white,
         title: Text(_titlePage),
         actions: [
           IconButton(
+            onPressed: () => _showDialogProfil(), 
+            icon: const Icon(Icons.person)
+          ),
+          IconButton(
             onPressed: () => disconnect(),
             icon: const Icon(Icons.logout_rounded),
-          )
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

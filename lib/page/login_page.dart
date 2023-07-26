@@ -37,9 +37,10 @@ class _LoginPageState extends State<LoginPage> {
               height: 350,
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
+            ElevatedButton.icon(
               onPressed: () => _openQRCode(),
-              child: const Text('Connexion avec un QR Code'),
+              label: const Text('Connexion avec un QR Code'),
+              icon: const Icon(Icons.qr_code_2_outlined),
             ),
           ],
         ),

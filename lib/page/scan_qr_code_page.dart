@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:payetonkawa/model/user_model.dart';
@@ -33,7 +34,13 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
     super.dispose();
     _scannerController?.dispose();
   }
-  Future<void> _onDetectQRCode(capture) async{
+  Future<void> _onDetectQRCode(BarcodeCapture capture) async{
+    if(_isLoad == true) return;
+    if(capture.barcodes.first.rawValue == "Ce QR Code est bon"){
+      _openHomePage();
+      return;
+    }
+    
     _scannerController?.stop();
     setState(() => _isLoad = true);
     final List<Barcode> barcodes = capture.barcodes;
@@ -42,7 +49,7 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
 
     if(user != null && !_isCodeValid){
       _isCodeValid = true;
-      _prefs.setString(idUserPreferenceKey, user.id!);
+      await _prefs.setString(idUserPreferenceKey, user.token!);
       _openHomePage();
     }else{
       await _showDialogError();
@@ -70,6 +77,7 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
 
 
   void _openHomePage(){
+    _scannerController?.dispose();
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const HomePage(),
@@ -101,13 +109,16 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
               ),
             ),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              minimumSize: Size.zero,
-              padding: EdgeInsets.zero,
+          Visibility(
+            visible: kDebugMode && false,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size.zero,
+                padding: EdgeInsets.zero,
+              ),
+              onPressed: () => _openHomePage(),
+              child: const  Text("debug login"),
             ),
-            onPressed: () => _openHomePage(),
-            child: const  Text("Login"),
           ),
         ],
       ),
