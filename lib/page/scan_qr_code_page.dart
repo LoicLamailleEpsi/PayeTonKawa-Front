@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:payetonkawa/entity/user.dart';
 import 'package:payetonkawa/model/user_model.dart';
 import 'package:payetonkawa/page/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,26 +46,26 @@ class _ScanQrCodePageState extends State<ScanQrCodePage> {
     setState(() => _isLoad = true);
     final List<Barcode> barcodes = capture.barcodes;
 
-    var user = await _userModel.getUser(barcodes.first.rawValue!);
+    DataResult<User> user = await _userModel.getUser(barcodes.first.rawValue!);
 
-    if(user != null && !_isCodeValid){
+    if(user.errorMessage == null && !_isCodeValid){
       _isCodeValid = true;
-      await _prefs.setString(idUserPreferenceKey, user.token!);
+      await _prefs.setString(idUserPreferenceKey, user.data!.token!);
       _openHomePage();
     }else{
-      await _showDialogError();
+      await _showDialogError(user.errorMessage ?? "");
       _scannerController?.start();
     }
    
     setState(() => _isLoad = false);
   }
 
-  Future<void> _showDialogError() async {
+  Future<void> _showDialogError(String error) async {
     await showDialog(
       context: context, 
       builder: (context) => AlertDialog(
-        title: const Text("Erreur de connexion"),
-        content: const Text("Le QRCode n'est pas reconnu"),
+        title: const Text("Erreur"),
+        content: Text(error),
         actions: [
           TextButton(
             child: const Text("Fermer"),

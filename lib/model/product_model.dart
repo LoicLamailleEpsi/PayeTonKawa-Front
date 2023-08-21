@@ -15,7 +15,7 @@ class ProductModel extends Model {
 
   Future<List<Product>?> getAllProducts() async {
     try {
-      var url = Uri.parse("$baseUrl/products?token=\"$token\"");
+      var url = Uri.parse("$baseUrl/products?token=$token");
       var response = await httpClient.get(url);
 
       if(response.statusCode == 200){
@@ -32,7 +32,7 @@ class ProductModel extends Model {
 
   Future<Product?> getProduct(String id) async {
     try{
-      var url = Uri.parse("$baseUrl/products/$id/?token=\"$token\"");
+      var url = Uri.parse("$baseUrl/products/$id?token=$token");
       var response = await httpClient.get(url);
 
       if(response.statusCode == 200){

@@ -10,7 +10,7 @@ class Product{
 
   factory Product.fromJson(Map<String, dynamic> json){
     return Product(
-      id: json["id"],
+      id: json["id"].toString(),
       name: json["name"],
       stock: (json["stock"] is String ? int.parse(json["stock"]) : json["stock"]),
       details: DetailProduct.fromJson(json["details"])
