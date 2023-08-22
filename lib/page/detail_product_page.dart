@@ -57,14 +57,17 @@ class _DetailProductPageState extends State<DetailProductPage> {
               padding: const EdgeInsets.only(left: 15, right: 15),
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Description", style: TextStyle(fontWeight: FontWeight.bold)),
-                        Text(_product?.details?.description ?? "N/A"),
-                      ],
+                  SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Description", style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(_product?.details?.description ?? "N/A"),
+                        ],
+                      ),
                     ),
                   ),
                   DetailInfo(

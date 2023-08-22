@@ -42,7 +42,8 @@ class _HomePageState extends State<HomePage> {
   Future<void> getUser() async {
     var token = getIt<SharedPreferences>().getString(idUserPreferenceKey);
     if(token != null){
-      _user = await _userModel.getUser(token);
+      var user = await _userModel.getUser(token);
+      _user = user.data;
     }
     
     _user ??= User(username: "unknown user");
@@ -62,6 +63,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Profil revendeur"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("Username : ${_user?.username}"),
             Text("Email : ${_user?.email}"),

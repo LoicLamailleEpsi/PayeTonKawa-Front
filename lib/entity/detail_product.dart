@@ -7,7 +7,7 @@ class DetailProduct {
   
   factory DetailProduct.fromJson(Map<String, dynamic> json){
     return DetailProduct(
-      price: json["price"],
+      price: (json["price"] is String ? json["price"] : json["price"].toString()),
       description: json["description"],
       color: json["color"]
     );
