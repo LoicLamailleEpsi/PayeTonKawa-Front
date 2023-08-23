@@ -63,7 +63,7 @@ class _ArViewState extends State<ArView> {
       var newNode = ARNode(
         type: NodeType.webGLB,
         uri: "https://raw.githubusercontent.com/LoicLamailleEpsi/PayeTonKawa-Front/main/Nespresso.glb",
-        scale: Vector3(0.1, 0.1, 0.1),
+        scale: Vector3(0.5, 0.5, 0.5),
         position: Vector3(0, 0, 0)
       );
       bool? didAddWebNode = await _arObjectManager.addNode(newNode);
