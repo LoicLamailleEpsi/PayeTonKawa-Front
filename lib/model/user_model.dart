@@ -3,11 +3,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:http/testing.dart';
 import 'package:payetonkawa/entity/user.dart';
 import 'package:payetonkawa/model/model.dart';
 
 class UserModel extends Model {
-  
+  UserModel({MockClient? mockClient}) : super(mockClient: mockClient);
+
   Future<DataResult<User>> getUser(String token) async {
     try {
       var url = Uri.parse("$baseUrl/users/getUserByToken?token=$token");
