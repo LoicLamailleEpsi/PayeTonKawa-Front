@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:http/testing.dart';
 import 'package:payetonkawa/entity/product.dart';
 import 'package:payetonkawa/model/model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +10,7 @@ import '../main.dart';
 class ProductModel extends Model {
   late String? token;
   
-  ProductModel(){
+  ProductModel({MockClient? mockClient}) : super(mockClient: mockClient){
     token = getIt<SharedPreferences>().getString(idUserPreferenceKey);
   }
 
