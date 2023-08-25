@@ -13,6 +13,11 @@ class HomePage extends StatefulWidget {
 
   @override
   State<HomePage> createState() => _HomePageState();
+
+  static GlobalKey<_HomePageState> homePageStateKey = GlobalKey<_HomePageState>();
+  int get openPage => homePageStateKey.currentState?._openPage ?? 0;
+  String get titlePage => homePageStateKey.currentState?._titlePage ?? "Paye Ton Kawa";
+  User? get user => homePageStateKey.currentState?._user;
 }
 
 class _HomePageState extends State<HomePage> {
