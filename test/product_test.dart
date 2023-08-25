@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:payetonkawa/main.dart';
+import 'package:payetonkawa/model/model.dart';
 import 'package:payetonkawa/model/product_model.dart';
 import 'package:payetonkawa/model/user_model.dart';
 import 'package:http/testing.dart';
@@ -41,16 +42,15 @@ void main() async {
       WidgetsFlutterBinding.ensureInitialized();
       await setup();
 
-      ProductModel productModel = new ProductModel();
-      
-      MockClient((request) async {
-        if(request.url.path != "${productModel.baseUrl}/products?token=14a8bca529"){
-          return Response("", 404);
+      final client = MockClient((request) async {
+        if(request.url.toString() != "$baseUrlConnexion/products?token=14a8bca529"){
+          return Response("", 403);
         }
 
         return Response(jsonListProduct, 200, headers: {'content-type': 'application/json'});
       });
 
+      ProductModel productModel = new ProductModel(mockClient: client);
       var data = await productModel.getAllProducts();
 
       expect(data, isNotNull);
@@ -64,38 +64,33 @@ void main() async {
     test('Correct QRCode test', () async {
       //14a8bca529
       String token = "14a8bca529";
-      final UserModel _userModel = UserModel();
 
-      MockClient((request) async {
-        if(request.url.path != "${_userModel.baseUrl}/users/getUserByToken?token=$token"){
+      final client = MockClient((request) async {
+        if(request.url.toString() != "$baseUrlConnexion/users/getUserByToken?token=14a8bca529"){
           return Response("", 404);
         }
         return Response(jsonUser, 200);
       });
 
-      var data1 = await _userModel.getUser(token);
+      final UserModel userModel = UserModel(mockClient: client);
+      var data1 = await userModel.getUser(token);
 
-      if(data1.data != null){
-        expect(data1.data!.id, "4");
-      } else if(data1.errorMessage != null){
-        stdout.writeln(data1.errorMessage);
-        expect(errorsMessage.contains(data1.errorMessage), isTrue);
-      }
+      expect(data1.data?.id ?? 0, "4");
       
     });
 
     test('Invalid QRCode test', () async {
       String token = "fakeqrcodeaaa";
-      final UserModel _userModel = UserModel();
 
-      MockClient((request) async {
-        if(request.url.path != "${_userModel.baseUrl}/users/getUserByToken?token=$token"){
-          return Response("", 404);
+      final client = MockClient((request) async {
+        if(request.url.toString() != "$baseUrlConnexion/users/getUserByToken?token=14a8bca529"){
+          return Response("", 403);
         }
         return Response(jsonUser, 200);
       });
 
-      var data1 = await _userModel.getUser(token);
+      final UserModel userModel = UserModel(mockClient: client);
+      var data1 = await userModel.getUser(token);
 
       stdout.writeln(data1.errorMessage);
       expect(errorsMessage.contains(data1.errorMessage), isTrue);
