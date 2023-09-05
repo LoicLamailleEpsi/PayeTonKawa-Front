@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:payetonkawa/main.dart';
 import 'package:payetonkawa/model/model.dart';

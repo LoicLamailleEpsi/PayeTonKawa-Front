@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 final getIt = GetIt.instance;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  //WidgetsFlutterBinding.ensureInitialized();
   await setup();
   runApp(const MyApp());
 }

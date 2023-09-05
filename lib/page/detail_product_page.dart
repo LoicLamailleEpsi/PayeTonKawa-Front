@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:http/testing.dart';
 import 'package:payetonkawa/entity/product.dart';
 import 'package:payetonkawa/model/product_model.dart';
 
 // ignore: must_be_immutable
 class DetailProductPage extends StatefulWidget {
   String id;
+  MockClient? mockClient;
 
-  DetailProductPage({super.key, required this.id});
+  DetailProductPage({super.key, required this.id, this.mockClient});
 
   @override
   State<DetailProductPage> createState() => _DetailProductPageState();
 }
 
 class _DetailProductPageState extends State<DetailProductPage> {
-  final ProductModel _productModel = new ProductModel();
+  late ProductModel _productModel;
   bool _isBusy = false;
 
   Product? _product;
+
+  _DetailProductPageState() {
+    _productModel = ProductModel(mockClient: widget.mockClient);
+  }
 
   @override
   void initState() {
@@ -27,77 +33,68 @@ class _DetailProductPageState extends State<DetailProductPage> {
   void getProduct() async {
     busy(true);
     var data = await _productModel.getProduct(widget.id);
-    if(data != null){
+    if (data != null) {
       setState(() {
         _product = data;
       });
     }
     busy(false);
   }
-  
-  void busy(bool value){
+
+  void busy(bool value) {
     setState(() => _isBusy = value);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(_product?.name ?? ""),
       ),
-      body: Builder(
-        builder: (context) {
-          if(_isBusy){
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }else{
-
-            return Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Description", style: TextStyle(fontWeight: FontWeight.bold)),
-                          Text(_product?.details?.description ?? "N/A"),
-                        ],
-                      ),
+      body: Builder(builder: (context) {
+        if (_isBusy) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Description",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text(_product?.details?.description ?? "N/A"),
+                      ],
                     ),
                   ),
-                  DetailInfo(
-                    iconData: Icons.euro_outlined, 
-                    text: "PRIX : ${_product?.details?.price ?? "N/A"}"
-                  ),
-                  DetailInfo(
-                    iconData: Icons.color_lens_outlined, 
-                    text: "Couleur : ${_product?.details?.color ?? "N/A"}"
-                  ),
-                  DetailInfo(
-                    iconData: Icons.inventory_2_outlined, 
-                    text: "${_product?.stock ?? "N/A"} pièces"
-                  ),
-                  const SizedBox(height: 15),
-                  Text(
-                    "ID du produit : ${_product?.id}", 
-                    style: const TextStyle(
-                      color: Colors.grey, 
-                      fontStyle: 
-                      FontStyle.italic
-                    ),
-                  ),
-                ],
-              ),
-            );
-            
-          }
+                ),
+                DetailInfo(
+                    iconData: Icons.euro_outlined,
+                    text: "PRIX : ${_product?.details?.price ?? "N/A"}"),
+                DetailInfo(
+                    iconData: Icons.color_lens_outlined,
+                    text: "Couleur : ${_product?.details?.color ?? "N/A"}"),
+                DetailInfo(
+                    iconData: Icons.inventory_2_outlined,
+                    text: "${_product?.stock ?? "N/A"} pièces"),
+                const SizedBox(height: 15),
+                Text(
+                  "ID du produit : ${_product?.id}",
+                  style: const TextStyle(
+                      color: Colors.grey, fontStyle: FontStyle.italic),
+                ),
+              ],
+            ),
+          );
         }
-      ),
+      }),
     );
   }
 }
