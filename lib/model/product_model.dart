@@ -8,16 +8,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
 class ProductModel extends Model {
-  late String? token;
+  late String? _token;
+  late Map<String, String> _headersData;
   
   ProductModel({MockClient? mockClient}) : super(mockClient: mockClient){
-    token = getIt<SharedPreferences>().getString(idUserPreferenceKey);
+    _token = getIt<SharedPreferences>().getString(idUserPreferenceKey);
+    _headersData = {
+      "token": _token ?? "",
+    };
   }
 
   Future<List<Product>?> getAllProducts() async {
     try {
-      var url = Uri.parse("$baseUrl/products?token=$token");
-      var response = await httpClient.get(url);
+      var url = Uri.parse("$baseUrl/products");
+      var response = await httpClient.get(url, headers: _headersData);
 
       if(response.statusCode == 200){
         List p = jsonDecode(response.body);
@@ -33,8 +37,8 @@ class ProductModel extends Model {
 
   Future<Product?> getProduct(String id) async {
     try{
-      var url = Uri.parse("$baseUrl/products/$id?token=$token");
-      var response = await httpClient.get(url);
+      var url = Uri.parse("$baseUrl/products/$id");
+      var response = await httpClient.get(url, headers: _headersData);
 
       if(response.statusCode == 200){
         Map<String, dynamic> p = jsonDecode(response.body);

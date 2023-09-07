@@ -12,8 +12,8 @@ class UserModel extends Model {
 
   Future<DataResult<User>> getUser(String token) async {
     try {
-      var url = Uri.parse("$baseUrl/users/getUserByToken?token=$token");
-      var response = await httpClient.get(url);
+      var url = Uri.parse("$baseUrl/users/getUserByToken");
+      var response = await httpClient.get(url, headers: {"token": token});
 
       //Map<String, dynamic> u = jsonDecode('{"id": "abc","email":"alex@hotmail.fr","username":"Alex", "token": "abcdef"}');
       //return User.fromJson(u);
