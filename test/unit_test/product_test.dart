@@ -21,7 +21,9 @@ void main() async {
       await setup();
 
       final client = MockClient((request) async {
-        if(request.url.toString() != "$baseUrlConnexion/products?token=14a8bca529"){
+        
+
+        if(request.url.toString() != "$baseUrlConnexion/products" || request.headers["token"] != "14a8bca529"){
           return Response("", 403);
         }
 

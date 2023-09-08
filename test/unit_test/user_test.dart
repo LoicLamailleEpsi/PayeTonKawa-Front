@@ -27,7 +27,7 @@ void main() async {
       String token = "14a8bca529";
 
       final client = MockClient((request) async {
-        if(request.url.toString() != "$baseUrlConnexion/users/getUserByToken?token=14a8bca529"){
+        if(request.url.toString() != "$baseUrlConnexion/users/getUserByToken" || request.headers["token"] != "14a8bca529"){
           return Response("", 404);
         }
         return Response(jsonUser, 200);
@@ -44,7 +44,7 @@ void main() async {
       String token = "fakeqrcodeaaa";
 
       final client = MockClient((request) async {
-        if(request.url.toString() != "$baseUrlConnexion/users/getUserByToken?token=14a8bca529"){
+        if(request.url.toString() != "$baseUrlConnexion/users/getUserByToken" || request.headers["token"] != "14a8bca529"){
           return Response("", 403);
         }
         return Response(jsonUser, 200);
